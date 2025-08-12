@@ -45,6 +45,7 @@ A modern, responsive web dashboard for the Warehouse Scheduler system that displ
 
 ### Configuration
 - **`vercel.json`**: Routing configuration for dashboard and API
+- **`index.py`**: Vercel entry point (imports from main.py)
 - **`requirements-vercel.txt`**: Vercel-compatible dependencies
 - **Environment Variables**: Set in Vercel Dashboard
 
