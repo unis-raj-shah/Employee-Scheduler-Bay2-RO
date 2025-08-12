@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Scheduler Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-warehouse"></i> Warehouse Scheduler Dashboard</h1>
+            <div class="header-actions">
+                <button id="wmsLoginBtn" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> WMS Login
+                </button>
+                <button id="refreshBtn" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+            </div>
+        </header>
+
+        <!-- Work Progress Bar -->
+        <div class="work-progress-container" id="workProgressContainer" style="display: none;">
+            <div class="work-progress-header">
+                <h3><i class="fas fa-cogs"></i> System Status</h3>
+                <span class="progress-status" id="progressStatus">Initializing...</span>
+            </div>
+            <div class="work-progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="work-progress-steps">
+                <div class="step" id="step1">
+                    <i class="fas fa-database"></i>
+                    <span>Database Connection</span>
+                </div>
+                <div class="step" id="step2">
+                    <i class="fas fa-users"></i>
+                    <span>Employee Data</span>
+                </div>
+                <div class="step" id="step3">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Schedule Generation</span>
+                </div>
+                <div class="step" id="step4">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Forecast Data</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Today's Schedule Section -->
+            <div class="card schedule-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-calendar-day"></i> Today's Schedule</h2>
+                    <span class="date-display" id="todayDate"></span>
+                </div>
+                <div class="card-content">
+                    <div class="loading" id="scheduleLoading">
+                        <div class="loading-content">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <div class="loading-text">
+                                <div>Loading schedule data...</div>
+                                <div class="loading-subtitle">Fetching forecast and staffing information</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="scheduleContent" class="schedule-content" style="display: none;">
+                        <div class="forecast-section">
+                            <h3>Forecast Data</h3>
+                            <div class="forecast-grid">
+                                <div class="forecast-item">
+                                    <span class="label">Shipping Pallets:</span>
+                                    <span class="value" id="shippingPallets">-</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="label">Incoming Pallets:</span>
+                                    <span class="value" id="incomingPallets">-</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="label">Cases to Pick:</span>
+                                    <span class="value" id="casesToPick">-</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="label">Staged Pallets:</span>
+                                    <span class="value" id="stagedPallets">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="staffing-section">
+                            <h3>Required Staff</h3>
+                            <div class="staffing-grid" id="requiredStaff">
+                                <!-- Staff requirements will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="assigned-section">
+                            <h3>Assigned Employees</h3>
+                            <div class="assigned-grid" id="assignedEmployees">
+                                <!-- Assigned employees will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employees Section -->
+            <div class="card employees-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-users"></i> All Employees</h2>
+                    <span class="count-badge" id="employeeCount">0</span>
+                </div>
+                <div class="card-content">
+                    <div class="loading" id="employeesLoading">
+                        <div class="loading-content">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <div class="loading-text">
+                                <div>Loading employee data...</div>
+                                <div class="loading-subtitle">Retrieving staff information from database</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="employeesContent" class="employees-content" style="display: none;">
+                        <div class="search-bar">
+                            <input type="text" id="employeeSearch" placeholder="Search employees..." class="search-input">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="employees-list" id="employeesList">
+                            <!-- Employees will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tomorrow's Schedule Section -->
+            <div class="card schedule-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-calendar-plus"></i> Tomorrow's Schedule</h2>
+                    <span class="date-display" id="tomorrowDate"></span>
+                </div>
+                <div class="card-content">
+                    <div class="loading" id="tomorrowLoading">
+                        <div class="loading-content">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <div class="loading-text">
+                                <div>Loading tomorrow's schedule...</div>
+                                <div class="loading-subtitle">Preparing next day's staffing plan</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tomorrowContent" class="schedule-content" style="display: none;">
+                        <div class="forecast-section">
+                            <h3>Forecast Data</h3>
+                            <div class="forecast-grid">
+                                <div class="forecast-item">
+                                    <span class="label">Shipping Pallets:</span>
+                                    <span class="value" id="tomorrowShippingPallets">-</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="label">Incoming Pallets:</span>
+                                    <span class="value" id="tomorrowIncomingPallets">-</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="label">Cases to Pick:</span>
+                                    <span class="value" id="tomorrowCasesToPick">-</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="label">Staged Pallets:</span>
+                                    <span class="value" id="tomorrowStagedPallets">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="staffing-section">
+                            <h3>Required Staff</h3>
+                            <div class="staffing-grid" id="tomorrowRequiredStaff">
+                                <!-- Staff requirements will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="assigned-section">
+                            <h3>Assigned Employees</h3>
+                            <div class="assigned-grid" id="tomorrowAssignedEmployees">
+                                <!-- Assigned employees will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Messages -->
+        <div id="statusMessage" class="status-message" style="display: none;"></div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
