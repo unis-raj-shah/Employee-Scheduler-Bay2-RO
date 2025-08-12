@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/dashboard"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/static/dashboard.html"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/main.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/main.py"
+    }
+  ],
+  "functions": {
+    "main.py": {
+      "runtime": "python3.9"
+    }
+  }
+}
