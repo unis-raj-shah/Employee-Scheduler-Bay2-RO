@@ -1,7 +1,5 @@
 """Main application for warehouse scheduler."""
 
-import sys
-import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -220,42 +218,4 @@ async def get_scheduled_employees_by_date(date: str) -> Dict[str, Any]:
             detail=f"Error retrieving scheduled employees: {str(e)}"
         )
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--api":
-        port = int(sys.argv[2]) if len(sys.argv) > 2 else 8000
-        print(f"Starting API server on port {port}")
-        print(f"API documentation available at:")
-        print(f"  - http://localhost:{port}/docs")
-        print(f"  - http://localhost:{port}/redoc")
-        uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
-    else:
-        print("\n=== Warehouse Shift Scheduler ===")
-        result = schedule_service.run_scheduler()
-        if result:
-            # Process tomorrow's data
-            tomorrow_data = result['tomorrow']
-            print(f"\nScheduling for Tomorrow ({tomorrow_data['date']} - {tomorrow_data['day_name']})")
-            print("\nForecast:")
-            print(f"- Shipping Pallets: {tomorrow_data['forecast_data']['shipping_pallets']:.1f}")
-            print(f"- Incoming Pallets: {tomorrow_data['forecast_data']['incoming_pallets']:.1f}")
-            print(f"- Cases to Pick: {tomorrow_data['forecast_data']['cases_to_pick']:.1f}")
-            print(f"- Staged Pallets: {tomorrow_data['forecast_data']['staged_pallets']:.1f}")
-            
-            print("\nRequired Staff:")
-            for role, count in tomorrow_data['required_roles'].items():
-                print(f"- {role}: {count}")
-
-            # Process day after tomorrow's data
-            day_after_data = result['day_after']
-            print(f"\nScheduling for Day After Tomorrow ({day_after_data['date']} - {day_after_data['day_name']})")
-            print("\nForecast:")
-            print(f"- Shipping Pallets: {day_after_data['forecast_data']['shipping_pallets']:.1f}")
-            print(f"- Incoming Pallets: {day_after_data['forecast_data']['incoming_pallets']:.1f}")
-            print(f"- Cases to Pick: {day_after_data['forecast_data']['cases_to_pick']:.1f}")
-            print(f"- Staged Pallets: {day_after_data['forecast_data']['staged_pallets']:.1f}")
-            
-            print("\nRequired Staff:")
-            for role, count in day_after_data['required_roles'].items():
-                print(f"- {role}: {count}")
-        else:
-            print("\nNo scheduling data available for the next two days")
+# Vercel deployment - CLI interface removed

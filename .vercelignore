@@ -1,0 +1,49 @@
+# Development and setup files
+database-setup.py
+test_dates.py
+requirements.txt
+
+# Unused service files (if not imported by main.py)
+staffing_history.py
+metrics_config.py
+metrics_service.py
+inbound_service.py
+notification_service.py
+api_client.py
+
+# Cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Database files (consider moving to cloud database for production)
+chroma_db/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
